@@ -1,0 +1,66 @@
+***Task 1
+
+import vertexai
+from vertexai.preview.vision_models import ImageGenerationModel
+
+def generate_bouquet_image(prompt: str):
+    """Generates an image using the imagen-3.0-generate-002 model and saves it locally."""
+
+    # Initialize Vertex AI
+    vertexai.init(project="YOUR_PROJECT_ID", location="Your_location")
+
+    # Load the model
+    model = ImageGenerationModel.from_pretrained("imagen-3.0-generate-002")
+
+    # Generate image using the prompt
+    images = model.generate_images(
+        prompt=prompt,
+        number_of_images=1,
+        seed=1,
+        add_watermark=False
+    )
+
+    # Save the generated image locally
+    with open("bouquet_image.jpeg", "wb") as f:
+        f.write(images[0]._image_bytes)
+
+    print("Image saved as image.jpeg")
+
+# Call the function with the required prompt
+generate_bouquet_image("Create an image containing a bouquet of 2 sunflowers and 3 roses")
+
+
+/usr/bin/python3 /genai.py
+
+*** Task 2
+
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part, Image
+
+def analyze_bouquet_image(project_id: str, location: str) -> str:
+    # Initialize Vertex AI
+    vertexai.init(project=project_id, location=location)
+
+    # Load Gemini multimodal model
+    multimodal_model = GenerativeModel("gemini-2.0-flash-001")
+
+    # Load the image and create the input parts
+    response = multimodal_model.generate_content(
+        [
+            Part.from_image(Image.load_from_file("image.jpeg")),
+            "Generate birthday wishes based on this image?"
+        ]
+    )
+
+    return response.text
+
+# Replace with your actual values
+project_id = "Your_project_id"
+location = "Your_location"
+
+# Call the function and print the result
+response = analyze_bouquet_image(project_id, location)
+print(response)
+
+
+
