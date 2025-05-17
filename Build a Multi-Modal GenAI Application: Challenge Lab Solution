@@ -21,7 +21,7 @@ def generate_bouquet_image(prompt: str):
     )
 
     # Save the generated image locally
-    with open("bouquet_image.jpeg", "wb") as f:
+    with open("image.jpeg", "wb") as f:
         f.write(images[0]._image_bytes)
 
     print("Image saved as image.jpeg")
